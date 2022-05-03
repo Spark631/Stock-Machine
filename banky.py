@@ -33,7 +33,6 @@ class balance():
         print(self.dicty)
 
 class Trade(balance):
-
     def __init__(self):
         super(balance,self).__init__
         self.portfolio = {}
@@ -41,6 +40,7 @@ class Trade(balance):
         self.trader_reply = ""
         self.day_viewer = 2
         self.loop = 0
+        
     def Saved(self,stock):
         j = json.dumps(stock)
         with open("Saved Info.json", "w") as f:
@@ -68,7 +68,7 @@ class Trade(balance):
                         close = data["Close"], name = "market data"))
 
         fig.update_layout(
-            title = f"{company} share prices",
+            title = f"{company} Share Prices",
             yaxis_title = "Stock Price ")
 
         fig.update_xaxes(
@@ -109,10 +109,10 @@ class Trade(balance):
 
         Trade.infoOptions(self)
         self.trader_reply = input("")
+        
         if self.trader_reply == "0":
             self.day_viewer += 2
             Trade.info(self,company)
-
         elif self.trader_reply == "1":
             Trade.graph_company(self,company)
             Trade.info(self,company)
@@ -143,7 +143,9 @@ class Trade(balance):
         [red]5 : Stop Trading[/red]
         """
         )
+        
         answer = input("")
+        
         if answer == "1":
             Trade.Saved_Reader(self)
             Trade.Options(self)
@@ -173,12 +175,15 @@ class Trade(balance):
             amount = input("")
             total = (tickerinfo["currentPrice"]) * int(amount)
             print(total)
+            
             if int(self.openned["money"] > total):
                 print("[light_green]Current price right now:[/light_green]",(tickerinfo["currentPrice"]))
                 print("[light_green]You have:[/light_green]",self.openned["money"])
                 print("\n[cyan1]Are you sure[/cyan1]")
                 print("1:[green]YES[/green] 2:[red]NO[/red]")
+                
                 answer = input("")
+                
                 if answer == "1":
                     balance.wallet(self,-total)
                     if which.upper() not in self.portfolio:
@@ -211,18 +216,23 @@ class Trade(balance):
         print("[red]0 : to quit[/red]")
         try:
             answer = input("")
+            
             tickerdata = yf.Ticker(answer)
             tickerinfo = tickerdata.info
             shower = (tickerinfo["currentPrice"])        
 
             print("Each share is currently:", shower)
             print("[bright_magenta bold]How many shares do you want to sell [/bright_magenta bold]")
+            
             amount = input("")
+            
             if int(amount) < self.portfolio[answer]:
                 total = shower * int(amount)
                 print("[green bold]You will gain: [/green bold]",total)
             print("1:[green]YES[/green] 2:[red]NO[/red]")
+            
             confirm = input("")
+            
             if confirm == "1":
                 self.portfolio[answer] -= int(amount)
                 Trade.Saved(self,self.portfolio)
@@ -233,5 +243,6 @@ class Trade(balance):
         except:
             print("[red bold]Invalid[/red bold]")
             Trade.Options(self)
+            
 Trades = Trade()
 Trades.Options()
